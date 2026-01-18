@@ -1,0 +1,74 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "uv: sync",
+            "type": "shell",
+            "command": "uv sync",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "uv: run search_engine",
+            "type": "shell",
+            "command": "uv run python search_engine.py",
+            "args": [
+                "Chicken Breast",
+                "--limit",
+                "2"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "uv: test (pytest)",
+            "type": "shell",
+            "command": "uv run python -m pytest",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "test"
+        },
+        {
+            "label": "uv: testmon (watch)",
+            "type": "shell",
+            "command": "uv run pytest --testmon --testmon-noselect --looponfail",
+            "problemMatcher": [],
+            "options": {
+                "env": {
+                    "PYTHONWARNINGS": "ignore::pytest.PytestRemovedIn9Warning"
+                }
+            },
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "ruff: format",
+            "type": "shell",
+            "command": "uv run ruff format .",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "ruff: lint",
+            "type": "shell",
+            "command": "uv run ruff check .",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            }
+        }
+    ]
+}

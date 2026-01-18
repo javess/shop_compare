@@ -5,15 +5,45 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Module",
+            "name": "Search Engine (debug)",
             "type": "debugpy",
             "request": "launch",
-            "module": "search_engine",
+            "program": "${workspaceFolder}/search_engine.py",
             "args": [
                 "Chicken Breast",
                 "--limit",
                 "2"
-            ]
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Search Engine (run)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/search_engine.py",
+            "args": [
+                "${input:searchQuery}",
+                "--limit",
+                "${input:searchLimit}"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "noDebug": true
+        }
+    ],
+    "inputs": [
+        {
+            "id": "searchQuery",
+            "type": "promptString",
+            "description": "Search query",
+            "default": "Chicken Breast"
+        },
+        {
+            "id": "searchLimit",
+            "type": "promptString",
+            "description": "Result limit",
+            "default": "2"
         }
     ]
 }

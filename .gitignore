@@ -169,3 +169,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Tooling caches
+.ruff_cache/
+.testmondata
+
+# OS files
+.DS_Store
