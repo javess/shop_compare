@@ -10,6 +10,17 @@ uv venv
 uv sync --dev
 ```
 
+## Quality gates
+```bash
+# Format and lint (run before commit)
+uv run ruff format .
+uv run ruff check .
+
+# Pre-commit hooks
+uv run pre-commit install
+uv run pre-commit run --all-files
+```
+
 ## Common commands
 ```bash
 # Run the app
@@ -27,6 +38,10 @@ uv run pytest --testmon --testmon-noselect --looponfail
 # Lint and format
 uv run ruff check .
 uv run ruff format .
+
+# Pre-commit hooks
+uv run pre-commit install
+uv run pre-commit run --all-files
 ```
 
 ## VS Code
@@ -41,4 +56,6 @@ make test
 make testmon
 make lint
 make fmt
+make precommit-install
+make precommit-run
 ```

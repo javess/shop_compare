@@ -1,4 +1,4 @@
-.PHONY: install sync run test testmon lint fmt
+.PHONY: install sync run test testmon lint fmt precommit-install precommit-run
 
 install:
 	uv sync --dev
@@ -20,3 +20,9 @@ lint:
 
 fmt:
 	uv run ruff format .
+
+precommit-install:
+	uv run pre-commit install
+
+precommit:
+	uv run pre-commit run --all-files

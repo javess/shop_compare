@@ -1,36 +1,47 @@
-import requests
-from fetchers.ocado.models import InitialState, Product
+"""Ocado store fetcher."""
+
 import re
+
 import fire
+import requests
+
 from fetchers.fetcher import Fetcher
+from fetchers.ocado.models import InitialState, Product
 
 
 class OcadoFetcher(Fetcher):
+    """Fetcher for the Ocado search endpoint."""
 
-    def replace_non_alpha_and_whitespace(self, string: str):
-        return re.sub(r'[^a-zA-Z\s]', ' ', string.lower()).replace(' ', '-')
+    def replace_non_alpha_and_whitespace(self, string: str) -> str:
+        """Normalize a string into a slug-safe token."""
+        return re.sub(r"[^a-zA-Z\s]", " ", string.lower()).replace(" ", "-")
 
-    def normalize_product_url(self, product: Product):
+    def normalize_product_url(self, product: Product) -> str:
+        """Build a canonical product URL for Ocado."""
         return f"https://www.ocado.com/products/{self.replace_non_alpha_and_whitespace(product.name)}-{product.sku}"
 
-    def search(self, query: str, limit: int = 10):
-
-        url = f'https://www.ocado.com/search?entry={query}'
+    def search(self, query: str, limit: int = 10) -> None:
+        """Fetch and print products for a query."""
+        url = f"https://www.ocado.com/search?entry={query}"
 
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
-            'sec-ch-ua': '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"macOS"'
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/133.0.0.0 Safari/537.36"
+            ),
+            "sec-ch-ua": '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"macOS"',
         }
 
-        cookies = {
-        }
+        cookies = {}
 
         response = requests.get(url, headers=headers, cookies=cookies)
 
-        initial_state = response.text.split("window.INITIAL_STATE =")[
-            1].split("</script>")[0].strip(" ;\n")
+        initial_state = (
+            response.text.split("window.INITIAL_STATE =")[1].split("</script>")[0].strip(" ;\n")
+        )
         parsed_state = InitialState.model_validate_json(initial_state)
 
         product_by_sku = parsed_state.products.productsBySku.root
@@ -39,13 +50,14 @@ class OcadoFetcher(Fetcher):
         for sku in product_by_sku:
             product = product_by_sku[sku]
             print(f"{product.name}: {product.catchWeight} {product.price}")
-            print(self.normalize_product_url(product)+"\n")
+            print(self.normalize_product_url(product) + "\n")
             counter += 1
             if counter > limit:
                 break
 
 
-def main(search: str, limit: int = 10):
+def main(search: str, limit: int = 10) -> None:
+    """CLI entrypoint for Ocado fetcher."""
     fetcher = OcadoFetcher()
     fetcher.search(search, limit)
 

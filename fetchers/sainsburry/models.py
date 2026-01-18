@@ -1,18 +1,26 @@
+"""Pydantic models for Sainsbury's responses."""
+
 from pydantic import BaseModel
 
 
 class UnitPrice(BaseModel):
+    """Unit price details."""
+
     price: float
     measure: str
     measure_amount: int
 
 
 class RetailPrice(BaseModel):
+    """Retail price details."""
+
     price: float
     measure: str
 
 
 class Label(BaseModel):
+    """Product label metadata."""
+
     label_uid: str
     text: str
     alt_text: str
@@ -21,6 +29,8 @@ class Label(BaseModel):
 
 
 class Review(BaseModel):
+    """Review metadata."""
+
     is_enabled: bool
     product_uid: str
     total: int
@@ -28,17 +38,23 @@ class Review(BaseModel):
 
 
 class Asset(BaseModel):
+    """Asset metadata for product media."""
+
     plp_image: str
     images: list[str]
     video: list[str]
 
 
 class Category(BaseModel):
+    """Product category metadata."""
+
     id: str
     name: str
 
 
 class Promotion(BaseModel):
+    """Promotion metadata."""
+
     promotion_uid: str
     icon: str
     link: str
@@ -53,15 +69,21 @@ class Promotion(BaseModel):
 
 
 class Header(BaseModel):
+    """Header metadata."""
+
     text: str
     type: str
 
 
 class Attribute(BaseModel):
+    """Product attribute metadata."""
+
     brand: list[str]
 
 
 class Product(BaseModel):
+    """Product metadata from Sainsbury's."""
+
     product_uid: str
     favourite_uid: str | None = None
     eans: list[str]
@@ -101,6 +123,8 @@ class Product(BaseModel):
 
 
 class Value(BaseModel):
+    """Filter value metadata."""
+
     id: str | None = None  # Made optional
     label: str
     value: str
@@ -109,6 +133,8 @@ class Value(BaseModel):
 
 
 class Filter(BaseModel):
+    """Filter metadata."""
+
     key: str
     label: str
     type: str
@@ -116,16 +142,22 @@ class Filter(BaseModel):
 
 
 class SortOption(BaseModel):
+    """Sort option metadata."""
+
     display: str
     value: str
 
 
 class Sort(BaseModel):
+    """Sorting metadata."""
+
     active: str
     options: list[SortOption]
 
 
 class Page(BaseModel):
+    """Pagination metadata."""
+
     active: int
     first: int
     last: int
@@ -134,6 +166,8 @@ class Page(BaseModel):
 
 
 class Controls(BaseModel):
+    """Controls metadata."""
+
     sort: Sort
     total_record_count: int
     returned_record_count: int
@@ -142,8 +176,11 @@ class Controls(BaseModel):
 
 
 class SainsburryData(BaseModel):
+    """Top-level Sainsbury's response payload."""
+
     products: list[Product]
     controls: Controls
+
 
 # Example usage:
 # data = SainsburryData.parse_raw(json_string)
